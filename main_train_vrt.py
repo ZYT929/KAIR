@@ -164,7 +164,7 @@ def main(json_path='options/vrt/001_train_vrt_videosr_bi_reds_6frames.json'):
     # ----------------------------------------
     '''
 
-    for epoch in range(1000000):  # keep running
+    for epoch in range(100):  # keep running
         for i, train_data in enumerate(train_loader):
 
             current_step += 1

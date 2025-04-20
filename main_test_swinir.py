@@ -124,7 +124,7 @@ def main():
 def define_model(args):
     # 001 classical image sr
     if args.task == 'classical_sr':
-        model = net(upscale=args.scale, in_chans=3, img_size=args.training_patch_size, window_size=8,
+        model = net(upscale=args.scale, in_chans=3, img_size=args.training_patch_size, window_size=5,
                     img_range=1., depths=[6, 6, 6, 6, 6, 6], embed_dim=180, num_heads=[6, 6, 6, 6, 6, 6],
                     mlp_ratio=2, upsampler='pixelshuffle', resi_connection='1conv')
         param_key_g = 'params'
@@ -186,7 +186,7 @@ def setup(args):
         save_dir = f'results/swinir_{args.task}_x{args.scale}'
         folder = args.folder_gt
         border = args.scale
-        window_size = 8
+        window_size = 5
 
     # 003 real-world image sr
     elif args.task in ['real_sr']:

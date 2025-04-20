@@ -3,6 +3,7 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 import numpy as np
 from math import exp
+import torch.nn as nn
 
 """
 # ============================================
@@ -10,6 +11,17 @@ from math import exp
 # https://github.com/Po-Hsun-Su/pytorch-ssim
 # ============================================
 """
+class MSESSIMLoss(nn.Module):
+    def __init__(self, ssim_weight=0.1, window_size=11, size_average=True):
+        super(MSESSIMLoss, self).__init__()
+        self.ssim_weight = ssim_weight
+        self.mse_loss = nn.MSELoss(reduction='mean')
+        self.ssim_loss = SSIMLoss(window_size=window_size, size_average=size_average)
+
+    def forward(self, img1, img2):
+        mse = self.mse_loss(img1, img2)
+        ssim = self.ssim_loss(img1, img2)
+        return mse + self.ssim_weight * (1-ssim)
 
 
 def gaussian(window_size, sigma):

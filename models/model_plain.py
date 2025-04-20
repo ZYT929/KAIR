@@ -8,6 +8,7 @@ from models.select_network import define_G
 from models.model_base import ModelBase
 from models.loss import CharbonnierLoss
 from models.loss_ssim import SSIMLoss
+from models.loss_ssim import MSESSIMLoss
 
 from utils.utils_model import test_mode
 from utils.utils_regularizers import regularizer_orth, regularizer_clip
@@ -97,6 +98,9 @@ class ModelPlain(ModelBase):
             self.G_lossfn = SSIMLoss().to(self.device)
         elif G_lossfn_type == 'charbonnier':
             self.G_lossfn = CharbonnierLoss(self.opt_train['G_charbonnier_eps']).to(self.device)
+        elif G_lossfn_type == 'full':  # 新增选项
+            ssim_weight = self.opt_train.get('G_ssim_weight', 2e-4)
+            self.G_lossfn = MSESSIMLoss(ssim_weight=ssim_weight).to(self.device)
         else:
             raise NotImplementedError('Loss type [{:s}] is not found.'.format(G_lossfn_type))
         self.G_lossfn_weight = self.opt_train['G_lossfn_weight']
